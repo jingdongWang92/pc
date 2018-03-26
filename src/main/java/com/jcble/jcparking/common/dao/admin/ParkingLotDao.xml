@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.admin.ParkingLotDao">
+	<insert id="insert" parameterType="ParkingLot" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="ParkingLot"></update>
+	<delete id="delete" parameterType="ParkingLot"></delete>
+	<select id="select" parameterType="ParkingLot" resultType="ParkingLot"></select>
+
+	<select id="queryParkingLotsByPage" resultType="ParkingLot" parameterType="ParkingLot">
+		select pl.id,pl.parkinglotName from t_parking_lot pl
+		<where>
+			<if test="null != parkinglotName">
+				and pl.parkinglotName like CONCAT(CONCAT('%', #{parkinglotName}), '%')
+			</if>
+		</where>
+		order by pl.id asc
+	</select>
+	
+	<select id="getAllParkingLot" resultType="ParkingLot" parameterType="ParkingLot">
+		select pl.* from t_parking_lot pl
+		order by pl.id asc
+	</select>
+	
+	<select id="getParkinglotById" resultType="ParkingLot" parameterType="Integer">
+		select pl.id,pl.parkinglotName,pl.freeTime,pl.haveMap,pl.haveLock
+		from t_parking_lot pl
+		where pl.id = #{parkinglotId}
+	</select>
+	
+	<select id="getParkingLotByParkingId" resultType="ParkingLot" parameterType="Integer">
+		select pl.* from t_parking_lot pl
+		inner join t_parking p on p.parkinglotId = pl.id
+		where p.id = #{parkingId}
+		order by pl.id desc
+		limit 0,1
+	</select>
+	
+	<select id="getParkingCount" resultType="ParkingLot" parameterType="Integer">
+		select * from 
+			(select count(1) as totalCount from t_parking_lot pl 
+			  inner join t_parking p on pl.id = p.parkinglotId 
+			  where pl.id = #{parkinglotId}) totalCount
+		   ,(select count(1) as freeCount from t_parking_lot pl 
+			  inner join t_parking p on pl.id = p.parkinglotId 
+			  where pl.id = #{parkinglotId} and status = '0') freeCount
+		   ,(select count(1) as revatationCount from t_parking_lot pl 
+			  inner join t_parking p on pl.id = p.parkinglotId 
+			  where pl.id = #{parkinglotId} and status = '0' and p.isRevatation = '1') revatationCount
+	</select>
+
+</mapper>

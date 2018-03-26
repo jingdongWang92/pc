@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.admin.AdminDao">
+	<insert id="insert" parameterType="Admin" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="Admin"></update>
+	<delete id="delete" parameterType="Admin"></delete>
+	<select id="select" parameterType="Admin" resultType="Admin"></select>
+
+	<select id="findAdminByAccount" parameterType="Admin"
+		resultType="Admin">
+		select a.id,a.name,a.password from t_administrator a where a.account = #{account};
+	</select>
+	
+	<select id="findAdminByParkingId" parameterType="Integer" resultType="Admin">
+		select * from t_administrator a 
+		inner join t_parking_admin pa on pa.adminId = a.id
+		inner join t_parking p on pa.parkingId = p.id
+		where p.id = #{parkingId};
+	</select>
+</mapper>

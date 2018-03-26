@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.admin.RoleDao">
+	<insert id="insert" parameterType="Role" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="Role"></update>
+	<delete id="delete" parameterType="Role"></delete>
+	<select id="select" parameterType="Role" resultType="Role"></select>
+
+
+	<select id="getRoleByAdminId" parameterType="Integer"
+		resultType="Role">
+		select r.* 
+		  from t_role r,t_administrator a,t_admin_role ar
+		 where r.id = ar.roleId
+		   and a.id = ar.adminId
+		   and a.id = #{adminId}
+	</select>
+</mapper>

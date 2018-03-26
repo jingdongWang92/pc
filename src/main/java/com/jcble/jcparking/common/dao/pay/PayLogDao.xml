@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.pay.PayLogDao">
+	<insert id="insert" parameterType="PayLog"></insert>
+	<update id="update" parameterType="PayLog"></update>
+	<delete id="delete" parameterType="PayLog"></delete>
+	<select id="select" parameterType="PayLog" resultType="PayLog"></select>
+	<select id="getPayLog" parameterType="PayLog" resultType="PayLog">
+		select * from t_pay_log p
+		<where>
+			<if test="null != orderNo">
+				and p.orderNo=#{orderNo}
+			</if>
+			<if test="null != payStatus">
+				and p.payStatus=#{payStatus}
+			</if>
+			<if test="null != type">
+				and p.type=#{type}
+			</if>
+			<!-- <if test="null != payWay"> and p.payWay=#{payWay} </if> -->
+			<if test="null != amount">
+				and p.amount=#{amount}
+			</if>
+		</where>
+	</select>
+
+	<select id="getLatestPayRecordByOrderNo" parameterType="String" resultType="PayLog">
+		select * from t_pay_log p 
+		where p.orderNo like CONCAT(CONCAT('%', #{orderNo}), '%')
+		and p.payStatus = '1'
+		order by id desc
+		limit 0,1
+	</select>
+</mapper>

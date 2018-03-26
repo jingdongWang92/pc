@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.devices.ParkingLockOpLogDao">
+
+	<insert id="insert" parameterType="ParkingLockOpLog" useGeneratedKeys="true" keyProperty="id"></insert>
+	<update id="update" parameterType="ParkingLockOpLog"></update>
+	<delete id="delete" parameterType="ParkingLockOpLog"></delete>
+	<select id="select" parameterType="ParkingLockOpLog" resultType="ParkingLockOpLog"></select>
+
+</mapper>

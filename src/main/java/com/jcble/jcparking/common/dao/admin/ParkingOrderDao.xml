@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.admin.ParkingOrderDao">
+	<insert id="insert" parameterType="ParkingOrder" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="ParkingOrder"></update>
+	<delete id="delete" parameterType="ParkingOrder"></delete>
+	<select id="select" parameterType="ParkingOrder" resultType="ParkingOrder"></select>
+
+	<select id="queryByPage" resultType="ParkingOrder" parameterType="ParkingOrder">
+		select 
+			 po.id,
+			 po.carNumber,
+			 po.inTime,
+			 po.outTime,
+			 po.payWay,
+			 po.payStatus,
+			 po.totalFee,
+			 pl.parkinglotName
+	    from t_parking_order po
+	    inner join t_parking_admin pa on po.parkingId = pa.parkingId
+	    inner join t_parking p on po.parkingId = p.id
+	    inner join t_parking_lot pl on p.parkinglotId = pl.id
+	    <where>
+			<if test="null != orderStatus">
+				and po.orderStatus != #{orderStatus}
+			</if>
+			<if test="null != payStatus">
+				and po.payStatus = #{payStatus}
+			</if>
+			<if test="null != payWay">
+				<if test="payWay == 0">
+				   and (po.payWay = '2' or po.payWay = '3' or po.payWay = '4') 
+				</if>
+				<if test="payWay == 1">
+					and po.payWay = #{payWay}
+				</if>
+			</if>
+			
+			<if test="null != inTime">
+				<![CDATA[and po.inTime >= #{inTime}]]>
+			</if>
+			<if test="null != outTime">
+				<![CDATA[and po.outTime <= #{outTime}]]>
+			</if>
+			<if test="null != operatorId">
+				and pa.adminId=#{operatorId}
+			</if>
+			<if test="null != carNumber">
+				and po.carNumber like CONCAT(CONCAT('%', #{carNumber}), '%')
+			</if>
+		</where>
+	    order by po.id desc
+	</select>
+	
+	<select id="getOrderById" resultType="ParkingOrder" parameterType="Integer">
+		select po.id,po.orderNo,po.carNumber,po.inTime,po.outTime,po.payTime,po.payStatus,po.totalFee,po.payedFee,po.parkingId,p.parkinglotId,pl.parkinglotName
+		from t_parking_order po 
+		left join t_parking p on po.parkingId = p.id 
+		left join t_parking_lot pl on p.parkinglotId = pl.id
+		where po.id = #{id}
+	</select>
+	
+	<select id="getOrderByOrderNo" resultType="ParkingOrder" parameterType="String">
+		select * from t_parking_order po 
+		where po.orderNo = #{orderNo}
+		order by po.id desc
+		limit 0,1
+	</select>
+	
+	<select id="getOwnFeeOrders" resultType="ParkingOrder" parameterType="ParkingOrder">
+		select *
+		from t_parking_order po 
+		<where>
+			<if test="null != carNumber">
+				and po.carNumber = #{carNumber}
+			</if>
+			<if test="null != orderStatus">
+				and po.orderStatus =#{orderStatus}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getOrdersByOperator"  resultType="ParkingOrder" parameterType="Integer">
+		select * from t_parking_order po
+		<where>
+			<if test="null != inTime">
+				<![CDATA[and po.inTime >= #{inTime}]]>
+			</if>
+			<if test="null != outTime">
+				<![CDATA[and po.outTime <= #{outTime}]]>
+			</if>
+			<if test="null != operatorId">
+				and (po.creator = #{operatorId} or operatorId = #{operatorId})
+			</if>
+			and po.orderStatus != '0';
+		</where>
+	</select>
+	
+	<select id="queryPayedOrders" resultType="ParkingOrder" parameterType="ParkingOrder">
+		select po.*
+		from t_parking_order po 
+		<where>
+			<if test="null != payStatus">
+				and po.payStatus = #{payStatus}
+			</if>
+			<if test="null != orderStatus">
+				and po.orderStatus = #{orderStatus}
+			</if>
+			<if test="null != isFree">
+				and po.isFree != #{isFree} 
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryUserOrdersByPage" resultType="ParkingOrder" parameterType="ParkingOrder">
+		select 
+			 po.id,
+			 po.carNumber,
+			 po.inTime,
+			 po.outTime,
+			 po.payWay,
+			 po.payStatus,
+			 po.totalFee,
+			 po.orderInvoiceStatus,
+			 pl.parkinglotName
+	    from t_parking_order po
+	    inner join t_parking p on po.parkingId = p.id
+	    inner join t_parking_lot pl on p.parkinglotId = pl.id
+	    <where>
+			<if test="null != orderStatus">
+				and po.orderStatus != #{orderStatus}
+			</if>
+			<if test="null != userId">
+				and po.userId = #{userId}
+			</if>
+		</where>
+	    order by po.id desc
+	</select>
+	
+	<select id="getOrderByCar" resultType="ParkingOrder" parameterType="ParkingOrder">
+		select * from t_parking_order po
+		 <where>
+			<if test="null != carNumber">
+				and po.carNumber = #{carNumber}
+			</if>
+			<if test="null != orderStatus">
+				and po.orderStatus = #{orderStatus}
+			</if>
+			<if test="null != userId">
+				and po.userId = #{userId}
+			</if>
+		</where>
+	    order by id desc
+	    limit 0,1
+	</select>
+	
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.admin.ParkingLockDao">
+	<insert id="insert" parameterType="ParkingLock" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="ParkingLock"></update>
+	<delete id="delete" parameterType="ParkingLock"></delete>
+	<select id="select" parameterType="ParkingLock" resultType="ParkingLock"></select>
+
+	<select id="getDeviceByParkingId" resultType="ParkingLock" parameterType="ParkingLock">
+		select pl.id,pl.serialNumber,pl.power,pl.status,pl.location
+	      from t_parking_lock pl
+		 where pl.parkingId=#{parkingId}
+		 order by pl.id desc
+		 limit 0,1
+	</select>
+	
+	<select id="getParkingLockBySerialNo"  resultType="ParkingLock" parameterType="String">
+		select pl.*
+	      from t_parking_lock pl
+		 where pl.serialNumber=#{serialNumber}
+		limit 0,1
+	</select>
+	
+</mapper>

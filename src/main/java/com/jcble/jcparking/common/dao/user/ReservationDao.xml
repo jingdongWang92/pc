@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.user.ReservationDao">
+	<insert id="insert" parameterType="Reservation" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="Reservation"></update>
+	<delete id="delete" parameterType="Reservation"></delete>
+	<select id="select" parameterType="Reservation" resultType="Reservation"></select>
+
+	<select id="queryReservationsByPage" parameterType="Reservation" resultType="Reservation">
+		select r.id
+			  ,r.duration
+			  ,pl.id as parkinglotId
+			  ,r.parkingId
+			  ,pl.parkinglotName
+			  ,p.parkingNo
+			  ,r.payedFee
+			  ,r.status
+		from t_reservation r 
+		left join t_parking p on r.parkingId = p.id
+		left join t_parking_lot pl on p.parkinglotId = pl.id
+		<where>
+			<if test="null != userId">
+				and r.userId=#{userId}
+			</if>
+		</where>
+		order by r.id desc
+	</select>
+	
+	<select id="getReservations" parameterType="Reservation" resultType="Reservation">
+		select * from t_reservation r 
+		<where>
+			<if test="null != status">
+				and r.status=#{status}
+			</if>
+			<if test="null != payStatus">
+				and r.payStatus=#{payStatus}
+			</if>
+		</where>
+		order by id asc
+	</select>
+	
+	<select id="getReservationByOrderNo" parameterType="String" resultType="Reservation">
+		select * from t_reservation r where r.orderNo=#{orderNo}
+		order by id asc
+		limit 0,1
+	</select>
+	
+	<select id="getReservationByCar" parameterType="Reservation" resultType="Reservation">
+		select r.*,pl.parkinglotName,p.parkingNo from t_reservation r 
+		inner join t_parking p on r.parkingId = p.id
+		inner join t_parking_lot pl on p.parkinglotId = pl.id
+		<where>
+			<if test="null != status">
+				and r.status=#{status}
+			</if>
+			<if test="null != carNumber">
+				and r.carNumber=#{carNumber}
+			</if>
+			<if test="null != userId">
+				and r.userId=#{userId}
+			</if>
+		</where>
+		order by id asc
+		limit 0,1
+	</select>
+</mapper>

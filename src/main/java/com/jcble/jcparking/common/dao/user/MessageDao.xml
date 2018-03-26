@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.user.MessageDao">
+	<insert id="insert" parameterType="Message"></insert>
+	<update id="update" parameterType="Message"></update>
+	<delete id="delete" parameterType="Message"></delete>
+	<select id="select" parameterType="Message" resultType="Message"></select>
+
+	<select id="queryMessagesByPage" parameterType="Message" resultType="Message">
+		select um.id,pm.createTime,pm.title,pm.content,um.readStatus
+		from t_push_message pm
+		inner join t_user_message um on pm.id = um.pushMessageId
+		<where>
+			<if test="userId != null">
+				um.userId = #{userId}
+			</if>
+		</where>
+		order by pm.id desc
+	</select>
+
+</mapper>

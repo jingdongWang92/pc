@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.user.UserCarDao">
+	<insert id="insert" parameterType="UserCar" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="UserCar"></update>
+	<delete id="delete" parameterType="UserCar"></delete>
+	<select id="select" parameterType="UserCar" resultType="UserCar"></select>
+
+	<select id="getCarByCarNumber" parameterType="String" resultType="UserCar">
+		select * from t_user_car uc where uc.carNumber = #{carNumber}
+	</select>
+
+	<select id="getCarByUserIdAndCarNumber" parameterType="UserCar" resultType="UserCar">
+		select * from t_user_car uc
+		<where>
+			<if test="null != carNumber">
+				and uc.carNumber=#{carNumber}
+			</if>
+			<if test="null != userId">
+				and uc.userId=#{userId}
+			</if>
+		</where>
+		limit 0,1
+	</select>
+	
+	<select id="getCarsByUserId" parameterType="String" resultType="UserCar">
+		select uc.id,uc.carNumber,uc.status from t_user_car uc
+		where uc.userId = #{userId}
+		order by uc.id desc
+	</select>
+	
+	<update id="updateCarStatusToInByCarNumber" parameterType="String">
+		update t_user_car uc set uc.status = '2' where uc.carNumber = #{carNumber}
+	</update>
+</mapper>

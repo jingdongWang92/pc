@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.devices.LockDataLogDao">
+
+	<insert id="insert" parameterType="LockDataLog" useGeneratedKeys="true" keyProperty="id"></insert>
+	<update id="update" parameterType="LockDataLog"></update>
+	<delete id="delete" parameterType="LockDataLog"></delete>
+	<select id="select" parameterType="LockDataLog" resultType="LockDataLog"></select>
+
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.user.UserWechatDao">
+	<insert id="insert" parameterType="UserWechat"></insert>
+	<update id="update" parameterType="UserWechat"></update>
+	<delete id="delete" parameterType="UserWechat"></delete>
+	<select id="select" parameterType="UserWechat" resultType="UserWechat"></select>
+
+	<select id="getWechatByAccount" parameterType="String"
+		resultType="UserWechat">
+		select * from t_user_wechat uw where uw.wechatAcc = #{wechatAcc}
+	</select>
+
+</mapper>

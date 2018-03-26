@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.user.UserAuthDao">
+	<insert id="insert" parameterType="UserAuth" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="UserAuth"></update>
+	<delete id="delete" parameterType="UserAuth"></delete>
+	<select id="select" parameterType="UserAuth" resultType="UserAuth"></select>
+	
+	<select id="getUserByAccount" parameterType="UserAuth" resultType="UserAuth">
+		select * from t_user_auth u where u.account = #{account}
+	</select>
+	
+	<update id="updateUserAuth" parameterType="UserAuth">
+		update t_user_auth u set u.account = #{account}
+		where u.userId = #{userId}
+	</update>
+</mapper>

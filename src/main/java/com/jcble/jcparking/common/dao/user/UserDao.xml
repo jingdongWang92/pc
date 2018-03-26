@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.user.UserDao">
+	<insert id="insert" parameterType="UserAuth"></insert>
+	<update id="update" parameterType="UserAuth"></update>
+	<delete id="delete" parameterType="UserAuth"></delete>
+	<select id="select" parameterType="UserAuth" resultType="UserAuth"></select>
+
+	<select id="getUserByUserId" parameterType="String" resultMap="userMap">
+		select u.id
+		,u.phoneNumber
+		,u.balance
+		,uw.wechatAcc
+		,uw.nickname
+		from t_user u
+		left join t_user_wechat uw on u.id = uw.userId
+		where u.id = #{userId}
+	</select>
+
+	<select id="getUserPhoneNumber" parameterType="String"
+		resultType="User">
+		select * from t_user u where u.phoneNumber = #{phoneNumber}
+	</select>
+
+	<resultMap id="userMap" type="User">
+		<result column="id" property="id"></result>
+		<result column="phoneNumber" property="phoneNumber"></result>
+		<result column="balance" property="balance"></result>
+		<association property="wechat" resultMap="wechatMap" />
+	</resultMap>
+
+	<resultMap id="wechatMap" type="UserWechat">
+		<result column="wechatAcc" property="wechatAcc"></result>
+		<result column="nickname" property="nickname"></result>
+	</resultMap>
+
+</mapper>

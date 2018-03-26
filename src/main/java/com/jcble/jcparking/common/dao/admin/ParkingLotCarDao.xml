@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.admin.ParkingLotCarDao">
+	<insert id="insert" parameterType="ParkingLotCar" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="ParkingLotCar"></update>
+	<delete id="delete" parameterType="ParkingLotCar"></delete>
+	<select id="select" parameterType="ParkingLotCar" resultType="ParkingLotCar"></select>
+
+	<select id="queryParkingLotCarByPage" resultMap="parkingLotCarMap" parameterType="ParkingLotCar">
+		select 
+			 pc.id,
+			 pc.carNumber,
+			 pc.inTime,
+			 pc.carType,
+			 p.id as parkingId,
+			 pl.id as parkinglotId,
+			 pl.parkinglotName,
+			 p.parkingNo,
+			 pc.pType,
+			 po.id as orderId,
+			 po.orderNo as parkingOrderNo,
+			 po.payStatus,
+			 po.orderStatus,
+			 po.isFree
+	    from t_parkinglot_car pc
+	    inner join t_parking_admin pa on pa.parkingId = pc.parkingId
+	    inner join t_parking p on pc.parkingId = p.id
+	    left join t_parking_order po on pc.orderNo = po.orderNo
+	    left join t_parking_lot pl on p.parkinglotId = pl.id
+	    where pa.adminId = #{operatorId}
+	    and pc.outTime is null
+	    order by orderStatus asc,pc.id desc
+	</select>
+	
+	<select id="getCarByCarNumber" resultType="ParkingLotCar" parameterType="ParkingLotCar">
+		select * from t_parkinglot_car pc
+		where pc.carNumber = #{carNumber}
+		order by pc.id desc
+		limit 0,1
+	</select>
+	
+	<resultMap id="parkingLotCarMap" type="ParkingLotCar">
+        <result column="id" property="id"></result>
+        <result column="carNumber" property="carNumber"></result>
+        <result column="inTime" property="inTime"></result>
+        <result column="carType" property="carType"></result>
+        <result column="parkingNo" property="parkingNo"></result>
+        <result column="parkinglotName" property="parkinglotName"></result>
+        <result column="parkingId" property="parkingId"></result>
+        <result column="parkinglotId" property="parkinglotId"></result>
+        <association property="order" resultMap="parkingOrderMap" />
+    </resultMap>
+    
+    <resultMap id="parkingOrderMap" type="ParkingOrder">
+        <result column="orderId" property="id"></result>
+        <result column="payStatus" property="payStatus"></result>
+        <result column="orderStatus" property="orderStatus"></result>
+        <result column="parkingOrderNo" property="orderNo"></result>
+        <result column="isFree" property="isFree"></result>
+    </resultMap>
+    
+    <select id="getParkingLotCarByParkingId" resultType="ParkingLotCar" parameterType="Integer">
+    	select * from t_parkinglot_car pl
+    	where pl.parkingId = #{parkingId}
+    	and pl.outTime is null
+    	order by pl.id desc
+    	limit 0,1
+    </select>
+    
+    <select id="getParkingLotCarByCarNumber" resultType="ParkingLotCar" parameterType="String">
+    	select * from t_parkinglot_car pl
+    	where pl.carNumber = #{carNumber}
+    	and pl.outTime is null
+    	order by pl.id desc
+    	limit 0,1
+    </select>
+
+</mapper>

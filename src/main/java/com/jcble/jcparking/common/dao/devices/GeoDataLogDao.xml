@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.devices.GeoDataLogDao">
+
+	<insert id="insert" parameterType="GeoDataLog" useGeneratedKeys="true" keyProperty="id"></insert>
+	<update id="update" parameterType="GeoDataLog"></update>
+	<delete id="delete" parameterType="GeoDataLog"></delete>
+	<select id="select" parameterType="GeoDataLog" resultType="GeoDataLog"></select>
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.admin.GeomagnetismDao">
+	<insert id="insert" parameterType="Geomagnetism" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="Geomagnetism"></update>
+	<delete id="delete" parameterType="Geomagnetism"></delete>
+	<select id="select" parameterType="Geomagnetism" resultType="Geomagnetism"></select>
+
+	<select id="getGeomagnetismBySerialNo"  resultType="Geomagnetism" parameterType="String">
+		select g.*
+	      from t_geomagnetism g
+		 where g.serialNumber=#{serialNumber}
+		limit 0,1
+	</select>
+
+</mapper>

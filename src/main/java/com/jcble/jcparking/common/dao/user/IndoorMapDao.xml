@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.user.IndoorMapDao">
+	<insert id="insert" parameterType="IndoorMap" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="IndoorMap"></update>
+	<delete id="delete" parameterType="IndoorMap"></delete>
+	<select id="select" parameterType="IndoorMap" resultType="IndoorMap"></select>
+	
+	<select id="getIndoorMapById" parameterType="Integer" resultType="IndoorMap">
+		select t.androidDownloadUrl,t.iosDownloadUrl,t.mapName,t.version from t_indoor_map t
+		where t.id = #{indoorMapId}
+	</select>
+	
+</mapper>

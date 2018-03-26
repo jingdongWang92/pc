@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.pay.AliPayCallbackLogDao">
+	<insert id="insert" parameterType="AlipayCallbackLog"></insert>
+	<update id="update" parameterType="AlipayCallbackLog"></update>
+	<delete id="delete" parameterType="AlipayCallbackLog"></delete>
+	<select id="select" parameterType="AlipayCallbackLog"
+		resultType="AlipayCallbackLog"></select>
+
+	<select id="getLogByNotifyId" parameterType="AlipayCallbackLog"
+		resultType="String">
+		select * from t_alipay_callback_log t
+		where t.notifyId = #{notifyId}
+	</select>
+
+</mapper>

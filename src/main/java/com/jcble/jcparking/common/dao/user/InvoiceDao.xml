@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.user.InvoiceDao">
+	<insert id="insert" parameterType="Invoice"></insert>
+	<update id="update" parameterType="Invoice"></update>
+	<delete id="delete" parameterType="Invoice"></delete>
+	<select id="select" parameterType="Invoice" resultType="Invoice"></select>
+
+	<select id="queryUserInvoicesByPage" parameterType="Invoice" resultType="Invoice">
+		select i.id
+		      ,i.invoiceNo
+			  ,i.amount
+			  ,i.invoiceHead
+			  ,i.status
+			  ,i.applyDate
+			  ,i.receiver
+			  ,i.linkPhone
+			  ,i.address
+			  ,i.isFreeDelivery
+         from t_invoice i
+		 inner join t_user u on i.userId = u.id
+		 <where>
+		 	<if test="null != userId">
+				and i.userId = #{userId}
+			</if>
+		</where>
+	    order by i.id desc
+	</select>
+
+</mapper>

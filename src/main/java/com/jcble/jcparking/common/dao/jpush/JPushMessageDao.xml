@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.jpush.JPushMessageDao">
+	<insert id="insert" parameterType="JPushMessage"></insert>
+	<update id="update" parameterType="JPushMessage"></update>
+	<delete id="delete" parameterType="JPushMessage"></delete>
+	<select id="select" parameterType="JPushMessage" resultType="JPushMessage"></select>
+
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.admin.ParkingDao">
+	<insert id="insert" parameterType="Parking" useGeneratedKeys="true"
+		keyProperty="id"></insert>
+	<update id="update" parameterType="Parking"></update>
+	<delete id="delete" parameterType="Parking"></delete>
+	<select id="select" parameterType="Parking" resultType="Parking"></select>
+
+	<select id="queryParkingsByPage" resultMap="parkingMap" parameterType="Parking">
+		select 
+		  p.id,
+		  p.parkinglotId,
+		  p.parkingNo,
+		  p.status,
+		  pl.id as lockId,
+		  pl.serialNumber as lockSerialNumber,
+		  pl.power as lockPower,
+		  pl.status as lockStatus,
+		  g.id as geoId,
+		  g.serialNumber as geoSerialNumber,
+		  g.power as geoPower,
+		  g.status as geoStatus
+		from t_parking p 
+		inner join t_parking_admin pa on p.id = pa.parkingId
+		inner join t_administrator a on pa.adminId = a.id
+		left join t_parking_lock pl on p.id = pl.parkingId
+		left join t_geomagnetism g on p.id = g.parkingId
+		<where>
+			<if test="null != parkinglotId">
+				and p.parkinglotId=#{parkinglotId}
+			</if>
+			<if test="null != lockStatus">
+				and pl.status=#{lockStatus}
+			</if>
+			<if test="null != areaId">
+				and p.areaId=#{areaId}
+			</if>
+			<if test="null != parkingNo">
+				and p.parkingNo like CONCAT(CONCAT('%', #{parkingNo}), '%')
+			</if>
+			<if test="null != operatorId">
+				and a.id=#{operatorId}
+			</if>
+			<if test="null != devBindStatus">
+				<if test="0 == devBindStatus">
+					and (p.lockSerialNumber is not null or p.geoSerialNumber is not null)
+				</if>
+				<if test="1 == devBindStatus">
+					and p.lockSerialNumber is null
+				</if>
+				<if test="2 == devBindStatus">
+					and p.geoSerialNumber is null
+				</if>
+			</if>
+		</where>
+		order by p.id asc
+	</select>
+	
+	<resultMap id="parkingMap" type="Parking">
+        <result column="id" property="id"></result>
+        <result column="parkingNo" property="parkingNo"></result>
+        <result column="parkinglotId" property="parkinglotId"></result>
+        <result column="status" property="status"></result>
+        <association property="parkingLock" resultMap="parkingLockMap" />
+        <association property="geomagnetism" resultMap="geomagnetismMap" />
+    </resultMap>
+    
+    <resultMap id="parkingLockMap" type="ParkingLock">
+        <result column="lockId" property="id"></result>
+        <result column="lockSerialNumber" property="serialNumber"></result>
+        <result column="power" property="power"></result>
+        <result column="lockStatus" property="status"></result>
+    </resultMap>
+    
+     <resultMap id="geomagnetismMap" type="Geomagnetism">
+       <result column="geoId" property="id"></result>
+        <result column="geoSerialNumber" property="serialNumber"></result>
+        <result column="geoPower" property="power"></result>
+        <result column="geoStatus" property="status"></result>
+    </resultMap>
+    
+    <!-- 获取空闲车位列表 -->
+    <select id="queryUnusedParkings" parameterType="Parking" resultType="Parking">
+    	select * from 
+    	t_parking p 
+    	<where>
+    		<if test="null != parkinglotId">
+    		  and p.parkinglotId=#{parkinglotId}
+    		</if>
+    		<if test="null != status">
+    		  and p.status=#{status}
+    		</if>
+    	</where>
+    </select>
+    
+    <!-- 获取一个空闲车位 -->
+    <select id="getFreeParking" parameterType="Parking" resultType="Parking">
+    	select * from 
+    	t_parking p 
+    	<where>
+    		<if test="null != parkinglotId">
+    		  and p.parkinglotId=#{parkinglotId}
+    		</if>
+    		<if test="null != status">
+    		  and p.status=#{status}
+    		</if>
+    		<if test="null != isRevatation">
+    		  and p.isRevatation=#{isRevatation}
+    		</if>
+    	</where>
+    	order by id asc
+    	limit 0,1
+    </select>
+    
+    <update id="updateParkingFree" parameterType="Integer">
+    	update t_parking p set p.status = '0' where p.id = #{parkingId}
+    </update>
+    
+     <update id="updateParkingUse" parameterType="Integer">
+    	update t_parking p set p.status = '1' where p.id = #{parkingId}
+    </update>
+
+</mapper>

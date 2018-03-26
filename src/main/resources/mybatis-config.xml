@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties>
+		<property name="dialect" value="mysql" />
+		<property name="pageSqlId" value=".*Page$" />
+	</properties>
+	<settings>
+		<!-- Valid values are SLF4J, LOG4J, JDK_LOGGING, COMMONS_LOGGING, STDOUT_LOGGING, 
+			NO_LOGGING or a full qualified class name that implements org.apache.ibatis.logging.Log 
+			and gets an string as a constructor parameter. -->
+		<setting name="logImpl" value="SLF4J" />
+	</settings>
+
+	<typeAliases>
+		<package name="com.jcble.jcparking.common.model"></package>
+		<package name="com.jcble.jcparking.common.model.shops"></package>
+		<package name="com.jcble.jcparking.common.system"></package>
+		<package name="com.jcble.jcparking.common.business"></package>
+	</typeAliases>
+
+	<typeHandlers>
+		<typeHandler javaType="string" jdbcType="DATE"
+			handler="baseproj.common.mybatis.typehandler.DateTypeHandler" />
+		<typeHandler javaType="string" jdbcType="TIMESTAMP"
+			handler="baseproj.common.mybatis.typehandler.TimestampTypeHanlder" />
+	</typeHandlers>
+	<plugins>
+		<plugin interceptor="baseproj.common.mybatis.cache.CacheInterceptor"></plugin>
+		<plugin interceptor="baseproj.common.mybatis.batch.BatchInterceptor"></plugin>
+		<plugin interceptor="baseproj.common.mybatis.mapper.AutoMapperInterceptor"></plugin>
+		<plugin interceptor="com.jcble.jcparking.common.mybatis.interceptor.PageInterceptor"></plugin>
+		<plugin interceptor="baseproj.common.mybatis.resulthandler.ResultSetHandlerInterceptor"></plugin>
+		<plugin interceptor="com.jcble.jcparking.common.mybatis.interceptor.MyBatisCheckEmptyBeforeExecuteInterceptor"></plugin>
+	</plugins>
+
+	<mappers>
+		<package name="com.xiaoguo.jc.common.dao"></package>
+	</mappers>
+</configuration>

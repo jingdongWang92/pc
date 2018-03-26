@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jcble.jcparking.common.dao.user.WhitelistDao">
+	<insert id="insert" parameterType="Whitelist"></insert>
+	<update id="update" parameterType="Whitelist"></update>
+	<delete id="delete" parameterType="Whitelist"></delete>
+	<select id="select" parameterType="Whitelist" resultType="Whitelist"></select>
+
+	<select id="getWhitelistsByCar" parameterType="Whitelist" resultType="Whitelist">
+		select w.*,pl.parkinglotName from t_whitelist w 
+		inner join t_parking_lot pl on w.parkinglotId = pl.id
+		<where>
+			<if test="null != status">
+				and w.status=#{status}
+			</if>
+			<if test="null != carNumber">
+				and w.carNumber = #{carNumber}
+			</if>
+			<if test="null != parkinglotId">
+				and w.parkinglotId=#{parkinglotId}
+			</if>
+		</where>
+		order by w.id asc
+	</select>
+
+
+</mapper>
